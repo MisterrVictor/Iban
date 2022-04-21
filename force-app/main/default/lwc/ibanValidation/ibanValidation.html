@@ -1,0 +1,38 @@
+<template>
+  <lightning-card title="IBAN" icon-name="standard:account">
+    <lightning-record-edit-form
+      record-id={recordId}
+      object-api-name="Account"
+      onsubmit={handleSubmit}
+      onsuccess={handleSuccess}
+    >
+      <lightning-input-field
+        field-name="IBAN__c"
+        value={ibanNumber}
+        data-id="input1"
+      ></lightning-input-field>
+
+      <lightning-input-field
+        field-name="IBAN_Status__c"
+        value={ibanStatus}
+        disabled="true"
+      ></lightning-input-field>
+
+      <div class="button">
+        <lightning-button
+          class="slds-var-m-right_small"
+          variant="brand"
+          label="Verify"
+          onclick={verifyIban}
+        ></lightning-button>
+        <lightning-button
+          class="slds-var-m-right_small"
+          variant="brand-outline"
+          type="submit"
+          name="save"
+          label="Save"
+        ></lightning-button>
+      </div>
+    </lightning-record-edit-form>
+  </lightning-card>
+</template>
