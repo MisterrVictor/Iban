@@ -1,26 +1,33 @@
 public with sharing class IBANValidation {
-    
+
     @AuraEnabled(cacheable=true)
     public static String ibanValidate(String ibanNumber){
         String result;
+        String responseBody;
         if(ibanNumber != Null){
             ibanNumber = ibanNumber.trim().toUpperCase().replaceAll('(\\s+)', '');
-            result = getIbanStatusCallout(ibanNumber);
+            responseBody = getIbanStatusCallout(ibanNumber);
+            result = getJSONParserResult(responseBody);
         }else {
             result = 'Check IBAN number';
         }
         return result;
     }
 
+    @TestVisible
     private static String getIbanStatusCallout(String ibanNumber){
-        ibanNumber = ibanNumber.trim().toUpperCase().replaceAll('(\\s+)', '');
         Http http = new Http();
         HttpRequest request = new HttpRequest();
         String endpoint = 'https://openiban.com/validate/' + ibanNumber + '?getBIC=true&validateBankCode=true';
         request.setEndPoint(endpoint);
         request.setMethod('GET');
-        HttpResponse response = http.send(request); //System.debug(response.getBody());
-        JSONParser parser = JSON.createParser(response.getBody());
+        HttpResponse response = http.send(request);
+        return response.getBody();
+    }
+
+    @TestVisible
+    private static String getJSONParserResult(String responseBody){
+        JSONParser parser = JSON.createParser(responseBody);
         String result = '';
         while (parser.nextToken() != null) {
             if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) &&
@@ -30,10 +37,10 @@ public with sharing class IBANValidation {
                 }
         }
         result = (result == 'true') ? 'Valid' : 'Invalid';
-        
         return result;
     }
 }
+
 
 
 //IBANValidation.ibanValidate('DE 89370400440532013000');
@@ -41,20 +48,3 @@ public with sharing class IBANValidation {
 //Account acct2 = new Account(Name='Test Account2', IBAN__c = 'DE8937040044053201300');
 //List <Account> a = new List <Account> {acct1, acct2};
 //insert a;
-/*
- // @future (callout=true)
-    Public static void setIbanStatus(Set<Id> ibanIds){
-        List<Account> accountsToUpdate = new List<Account>();
-        List<Account> accts = [
-            SELECT IBAN__c, IBAN_Status__c
-            FROM Account
-            WHERE Id IN :ibanIds];
-        
-        for(Account accounts : accts){
-            accounts.IBAN_Status__c = 'In progress';//getIbanStatusCallout(accounts.IBAN__c);
-            accountsToUpdate.add(accounts); 
-        }
-        update accountsToUpdate; 
-    }
-    
- */
