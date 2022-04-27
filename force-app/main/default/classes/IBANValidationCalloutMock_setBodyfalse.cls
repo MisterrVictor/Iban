@@ -1,10 +1,10 @@
 @isTest
-global class IBANValidationCalloutMock implements HttpCalloutMock{
+global class IBANValidationCalloutMock_setBodyfalse implements HttpCalloutMock{
     global HttpResponse respond(HTTPRequest req){
         HttpResponse res = new HttpResponse();
         res.setStatus('OK');
         res.setStatusCode(200);
-        res.setBody('{"valid": true}');
+        res.setBody('{"valid": false}');
         return res;
     }
 }
