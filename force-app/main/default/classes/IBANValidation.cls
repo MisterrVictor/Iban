@@ -8,8 +8,6 @@ public with sharing class IBANValidation {
             ibanNumber = ibanNumber.trim().toUpperCase().replaceAll('(\\s+)', '');
             responseBody = getIbanStatusCallout(ibanNumber);
             result = getJSONParserResult(responseBody);
-        }else {
-            result = 'Check IBAN number';
         }
         return result;
     }
@@ -40,6 +38,7 @@ public with sharing class IBANValidation {
         return result;
     }
 }
+
 
 
 
