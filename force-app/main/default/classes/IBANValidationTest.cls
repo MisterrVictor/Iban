@@ -28,14 +28,3 @@ public class IBANValidationTest {
         System.assertEquals('{"valid": true}', result);
     }
 }
-
-/*
-IBANValidationCalloutMock mock = new IBANValidationCalloutMock(200, 'OK', 'Valid', new Map<String,String>());
-    Test.setMock(HttpCalloutMock.class, mock);
-    String result;
-    Test.startTest();
-    result = IBANValidation.getIbanStatusCallout('DE 89370400440532013000');
-    Test.stopTest();
-    system.assertEquals('Valid', result);
-
-*/
