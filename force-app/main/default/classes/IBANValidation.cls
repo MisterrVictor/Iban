@@ -4,6 +4,7 @@ public with sharing class IBANValidation {
     public static String ibanValidate(String ibanNumber){
         String result;
         String responseBody;
+        HttpResponse response;
         if(ibanNumber != Null){
             ibanNumber = ibanNumber.trim().toUpperCase().replaceAll('(\\s+)', '');
             responseBody = getIbanStatusCallout(ibanNumber);
@@ -23,8 +24,7 @@ public with sharing class IBANValidation {
         return response.getBody();
     }
 
-    @TestVisible
-    private static String getJSONParserResult(String responseBody){
+    public static String getJSONParserResult(String responseBody){
         JSONParser parser = JSON.createParser(responseBody);
         String result = '';
         while (parser.nextToken() != null) {
